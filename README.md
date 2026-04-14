@@ -1,177 +1,271 @@
+# Quick Start Guide - Volopa OOP Expenses (Extended MetaGPT Pipeline for Legacy Systems)
 
-# MetaGPT: The Multi-Agent Framework
+## What This Is
 
-<p align="center">
-<a href=""><img src="docs/resources/MetaGPT-new-log.png" alt="MetaGPT logo: Enable GPT to work in a software company, collaborating to tackle more complex tasks." width="150px"></a>
-</p>
+This project extends MetaGPT with Laravel-focused roles that generate a full API codebase
+for Volopa's Out-of-Pocket (OOP) Expenses feature. The real goal is broader: proving that
+MetaGPT can be scaled to produce code that integrates with an existing legacy platform —
+not greenfield, but brownfield. Volopa OOP is the first case study.
 
-<p align="center">
-[ <b>En</b> |
-<a href="docs/README_CN.md">中</a> |
-<a href="docs/README_FR.md">Fr</a> |
-<a href="docs/README_JA.md">日</a> ]
-<b>Assign different roles to GPTs to form a collaborative entity for complex tasks.</b>
-</p>
+The key insight is **YAML context injection**. Instead of letting the LLM invent
+requirements, two structured YAML files feed every role with domain rules, platform
+constraints, database schemas, API contracts, and existing-system interfaces.
 
-<p align="center">
-<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
-<a href="https://discord.gg/DYn29wFk9z"><img src="https://img.shields.io/badge/Join-Discord-gGnrXvVz7a?logo=discord" alt="Discord Follow"></a>
-<a href="https://twitter.com/MetaGPT_"><img src="https://img.shields.io/twitter/follow/MetaGPT?style=social" alt="Twitter Follow"></a>
-</p>
+---
 
-<h4 align="center">
-    
-</h4>
+## Ready in 3 Steps
 
-## News
-
-🚀 Mar. 10, 2025: 🎉 [mgx.dev](https://mgx.dev/) is the #1 Product of the Week on @ProductHunt! 🏆
-
-🚀 Mar. &nbsp; 4, 2025: 🎉 [mgx.dev](https://mgx.dev/) is the #1 Product of the Day on @ProductHunt! 🏆
-
-🚀 Feb. 19, 2025: Today we are officially launching our natural language programming product: [MGX (MetaGPT X)](https://mgx.dev/) - the world's first AI agent development team. More details on [Twitter](https://x.com/MetaGPT_/status/1892199535130329356).
-
-🚀 Feb. 17, 2025: We introduced two papers: [SPO](https://arxiv.org/pdf/2502.06855) and [AOT](https://arxiv.org/pdf/2502.12018), check the [code](examples)!
-
-🚀 Jan. 22, 2025: Our paper [AFlow: Automating Agentic Workflow Generation](https://openreview.net/forum?id=z5uVAKwmjf) accepted for **oral presentation (top 1.8%)** at ICLR 2025, **ranking #2** in the LLM-based Agent category.
-
-👉👉 [Earlier news](docs/NEWS.md) 
-
-## Software Company as Multi-Agent System
-
-1. MetaGPT takes a **one line requirement** as input and outputs **user stories / competitive analysis / requirements / data structures / APIs / documents, etc.**
-2. Internally, MetaGPT includes **product managers / architects / project managers / engineers.** It provides the entire process of a **software company along with carefully orchestrated SOPs.**
-   1. `Code = SOP(Team)` is the core philosophy. We materialize SOP and apply it to teams composed of LLMs.
-
-![A software company consists of LLM-based roles](docs/resources/software_company_cd.jpeg)
-
-<p align="center">Software Company Multi-Agent Schematic (Gradually Implementing)</p>
-
-## Get Started
-
-### Installation
-
-> Ensure that Python 3.9 or later, but less than 3.12, is installed on your system. You can check this by using: `python --version`.  
-> You can use conda like this: `conda create -n metagpt python=3.9 && conda activate metagpt`
+### Step 1: Install and verify
 
 ```bash
-pip install --upgrade metagpt
-# or `pip install --upgrade git+https://github.com/geekan/MetaGPT.git`
-# or `git clone https://github.com/geekan/MetaGPT && cd MetaGPT && pip install --upgrade -e .`
+pip install -r requirements.txt
+
+# Verify all 5 roles are importable
+python -c "from industry.roles import LaravelProductManager, LaravelArchitect, LaravelProjectManager, LaravelEngineer, LaravelQaEngineer; print('All 5 roles imported successfully')"
 ```
 
-**Install [node](https://nodejs.org/en/download) and [pnpm](https://pnpm.io/installation#using-npm) before actual use.**
-
-For detailed installation guidance, please refer to [cli_install](https://docs.deepwisdom.ai/main/en/guide/get_started/installation.html#install-stable-version)
- or [docker_install](https://docs.deepwisdom.ai/main/en/guide/get_started/installation.html#install-with-docker)
-
-### Configuration
-
-You can init the config of MetaGPT by running the following command, or manually create `~/.metagpt/config2.yaml` file:
-```bash
-# Check https://docs.deepwisdom.ai/main/en/guide/get_started/configuration.html for more details
-metagpt --init-config  # it will create ~/.metagpt/config2.yaml, just modify it to your needs
-```
-
-You can configure `~/.metagpt/config2.yaml` according to the [example](https://github.com/geekan/MetaGPT/blob/main/config/config2.example.yaml) and [doc](https://docs.deepwisdom.ai/main/en/guide/get_started/configuration.html):
-
-```yaml
-llm:
-  api_type: "openai"  # or azure / ollama / groq etc. Check LLMType for more options
-  model: "gpt-4-turbo"  # or gpt-3.5-turbo
-  base_url: "https://api.openai.com/v1"  # or forward url / other llm url
-  api_key: "YOUR_API_KEY"
-```
-
-### Usage
-
-After installation, you can use MetaGPT at CLI
+### Step 2: Configure LLM
 
 ```bash
-metagpt "Create a 2048 game"  # this will create a repo in ./workspace
+# Copy the example config
+cp config/config2.example.yaml config/config2.yaml
+
+# Edit config/config2.yaml and add your API key:
+#   llm:
+#     api_type: "openai"
+#     model: "gpt-4o"
+#     base_url: "https://api.openai.com/v1"
+#     api_key: "YOUR_API_KEY"
 ```
 
-or use it as library
+### Step 3: Run
 
-```python
-from metagpt.software_company import generate_repo
-from metagpt.utils.project_repo import ProjectRepo
-
-repo: ProjectRepo = generate_repo("Create a 2048 game")  # or ProjectRepo("<path>")
-print(repo)  # it will print the repo structure with files
+```bash
+python industry/run_volopa_oop_expenses.py
 ```
 
-You can also use [Data Interpreter](https://github.com/geekan/MetaGPT/tree/main/examples/di) to write code:
+The script cleans the workspace, resets git state for the output directory, clears
+cached team storage, then runs 5 roles sequentially. Output lands in
+`workspace/volopa_oop_expenses/`.
+
+---
+
+## Project Layout
+
+```
+industry/
+  roles/
+    laravel_product_manager.py   # Joshua  - PRD from YAML requirements
+    laravel_architect.py         # Danny   - System design, ER, API contracts
+    laravel_project_manager.py   # Manuel  - Task breakdown, dependency ordering
+    laravel_engineer.py          # Lucas   - Laravel code generation
+    laravel_qa_engineer.py       # Darius  - PHPUnit test generation
+    __init__.py                  # Exports all 5 roles
+  actions/
+    laravel_write_prd.py         # LaravelWritePRD action
+    laravel_write_prd_an.py      # ActionNode schema for PRD
+    laravel_design_api.py        # LaravelWriteDesign action
+    laravel_design_api_an.py     # ActionNode schema for design
+    laravel_write_code.py        # LaravelWriteCode action
+  utils/
+    context_reader.py            # ContextReader - shared YAML accessor
+    evidence_injector.py         # Injects evidence into prompts
+    check_plan_dispatcher.py     # Verification protocol logic
+    repo_verifier.py             # Repository correctness checks
+  requirements/
+    project_context.yaml         # Feature-specific: requirements, flows, interfaces, constraints
+    environment_context.yaml     # Platform-wide: standards, dos/donts, existing tables/models, codebase interfaces, models
+    SD-OOP_User_Management_System.pdf
+    SD-OOP_Pocket_expense.pdf
+    SD-OOP_Expense_single_data_capturing.pdf
+  run_volopa_oop_expenses.py     # Entry point
+  dos_and_donts.pdf              # Platform coding standards reference
+  Volopa - Proposed Architecture.pdf
+```
+
+---
+
+## YAML Context Files (the core mechanism)
+
+All roles load context through `ContextReader` (`industry/utils/context_reader.py`),
+which lazy-loads and caches YAML data. Roles call methods like `get_dos_and_donts()`,
+`get_database_tables("full")`, `get_flows()`, etc. to inject structured text into
+their system prompts.
+
+### project_context.yaml
+
+Feature-scoped rules for OOP Expenses:
+
+- `intent` — objectives, business rationale, success criteria
+- `requirements` — REQ-001 through REQ-012, user journeys
+- `constraints` — file limits, validation rules, permission hierarchy, FX rules
+- `decisions` — architectural decisions (DEC-001+), unresolved questions
+- `flows` — end-to-end flows (CSV upload, single capture, permission delegation)
+- `interfaces` — database tables (new + existing), controllers, services, models,
+  API routes, CSV column schema, response schemas, permission matrix
+
+### environment_context.yaml
+
+Platform-wide standards that apply to any Volopa projects and features:
+
+- `intent` — platform purpose, mental model (Client -> route -> controller -> FormRequest -> service -> model -> Resource -> JSON), design principles
+- `constraints` — dos and donts (routing, validation, controller logic, resources, testing, auth), verification protocol, Laravel task conventions
+- `decisions` — platform-level architectural decisions
+- `interfaces` — existing database tables, models, middleware, endpoints, user roles, FX query contract
+
+---
+
+## Workflow (5 rounds)
+
+| Round | Role | Action | Input | Output |
+|-------|------|--------|-------|--------|
+| 1 | LaravelProductManager (Joshua) | PrepareDocuments + LaravelWritePRD | User idea + YAML context | `docs/prd/volopa_oop_expenses.md` |
+| 2 | LaravelArchitect (Danny) | LaravelWriteDesign | PRD + YAML context | `docs/system_design/volopa_oop_expenses.md` |
+| 3 | LaravelProjectManager (Manuel) | WriteTasks | System design + YAML context | `docs/task/volopa_oop_expenses.json` |
+| 4 | LaravelEngineer (Lucas) | LaravelWriteCode | Design + tasks + YAML context | `app/**/*.php`, `database/**/*.php`, `routes/api.php` |
+| 5 | LaravelQaEngineer (Darius) | WriteTest | All code + YAML context | `tests/Feature/**/*Test.php` |
+
+Each role subscribes to the previous role's output message and adds YAML-derived
+context to its system prompt before acting.
+
+---
+
+## Output Structure
+
+```
+workspace/volopa_oop_expenses/
+  .src_workspace                            # Prevents nested directory creation
+  docs/
+    requirement.txt                         # Original idea text
+    prd/
+      volopa_oop_expenses.md                # PRD (from ProductManager)
+    system_design/
+      volopa_oop_expenses.md                # System design (from Architect)
+    task/
+      volopa_oop_expenses.json              # Task breakdown (from ProjectManager)
+  app/
+    Http/
+      Controllers/Api/V1/                   # API controllers
+      Requests/                             # Form request validation
+      Resources/                            # API resources
+    Models/                                 # Eloquent models
+    Services/                               # Business logic services
+    Policies/                               # Authorization policies
+  database/
+    migrations/                             # Laravel migrations
+    factories/                              # Test factories
+  routes/
+    api.php                                 # API route definitions
+  tests/
+    Feature/                                # PHPUnit feature tests
+```
+
+---
+
+## Using the Roles Programmatically
 
 ```python
 import asyncio
-from metagpt.roles.di.data_interpreter import DataInterpreter
+from metagpt.config2 import config
+from metagpt.context import Context, AttrDict
+from metagpt.team import Team
+
+from industry.roles import (
+    LaravelProductManager,
+    LaravelArchitect,
+    LaravelProjectManager,
+    LaravelEngineer,
+    LaravelQaEngineer,
+)
 
 async def main():
-    di = DataInterpreter()
-    await di.run("Run data analysis on sklearn Iris dataset, include a plot")
+    workspace_path = "workspace/volopa_oop_expenses"
 
-asyncio.run(main())  # or await main() in a jupyter notebook setting
+    config.update_via_cli(
+        project_path=workspace_path,
+        project_name="volopa_oop_expenses",
+        inc=False,
+        reqa_file="",
+        max_auto_summarize_code=0,
+    )
+
+    ctx = Context(
+        config=config,
+        kwargs=AttrDict(project_path=workspace_path),
+    )
+
+    company = Team(context=ctx, use_mgx=False)
+    company.hire([
+        LaravelProductManager(context=ctx),
+        LaravelArchitect(context=ctx),
+        LaravelProjectManager(context=ctx),
+        LaravelEngineer(context=ctx),
+        LaravelQaEngineer(context=ctx),
+    ])
+    company.invest(investment=10.0)
+
+    await company.run(
+        n_round=5,
+        idea="Build the Volopa OOP Expenses API System using Laravel 10+ with PHP 8.2+.",
+        send_to="",
+        auto_archive=True,
+    )
+
+asyncio.run(main())
 ```
 
+---
 
-### QuickStart & Demo Video
-- Try it on [MetaGPT Huggingface Space](https://huggingface.co/spaces/deepwisdom/MetaGPT-SoftwareCompany)
-- [Matthew Berman: How To Install MetaGPT - Build A Startup With One Prompt!!](https://youtu.be/uT75J_KG_aY)
-- [Official Demo Video](https://github.com/geekan/MetaGPT/assets/2707039/5e8c1062-8c35-440f-bb20-2b0320f8d27d)
+## Troubleshooting
 
-https://github.com/user-attachments/assets/888cb169-78c3-4a42-9d62-9d90ed3928c9
+### "unknown origin" ValueError from Engineer
 
-## Tutorial
+`engineer.py:319` uses forward-slash path constants (`docs/task`) but `Path.parent`
+on Windows produces backslashes. The custom `LaravelEngineer` overrides
+`_new_coding_context` to catch the ValueError and return None (skip).
 
-- 🗒 [Online Document](https://docs.deepwisdom.ai/main/en/)
-- 💻 [Usage](https://docs.deepwisdom.ai/main/en/guide/get_started/quickstart.html)  
-- 🔎 [What can MetaGPT do?](https://docs.deepwisdom.ai/main/en/guide/get_started/introduction.html)
-- 🛠 How to build your own agents? 
-  - [MetaGPT Usage & Development Guide | Agent 101](https://docs.deepwisdom.ai/main/en/guide/tutorials/agent_101.html)
-  - [MetaGPT Usage & Development Guide | MultiAgent 101](https://docs.deepwisdom.ai/main/en/guide/tutorials/multi_agent_101.html)
-- 🧑‍💻 Contribution
-  - [Develop Roadmap](docs/ROADMAP.md)
-- 🔖 Use Cases
-  - [Data Interpreter](https://docs.deepwisdom.ai/main/en/guide/use_cases/agent/interpreter/intro.html)
-  - [Debate](https://docs.deepwisdom.ai/main/en/guide/use_cases/multi_agent/debate.html)
-  - [Researcher](https://docs.deepwisdom.ai/main/en/guide/use_cases/agent/researcher.html)
-  - [Receipt Assistant](https://docs.deepwisdom.ai/main/en/guide/use_cases/agent/receipt_assistant.html)
-- ❓ [FAQs](https://docs.deepwisdom.ai/main/en/guide/faq.html)
+### Token overflow during code generation
 
-## Support
+`WriteCode.get_codes()` includes the full source of every sibling file as context.
+By file ~30+ this exceeds 200K tokens. `LaravelEngineer` monkey-patches `get_codes`
+with `_size_limited_get_codes()` — full source up to 100K chars, then filenames-only.
 
-### Discord Join US
+### Double code generation (all files regenerated)
 
-📢 Join Our [Discord Channel](https://discord.gg/ZRHeExS6xv)! Looking forward to seeing you there! 🎉
+If `max_react_loop > 1`, the Engineer's `_think()` reads `rc.news[0]` without
+consuming it, so the same WriteTasks message triggers `_new_code_actions()` on
+every iteration. Fix: `max_react_loop=1` (already set in `LaravelEngineer`).
 
-### Contributor form
+### Pydantic serialization errors
 
-📝 [Fill out the form](https://airtable.com/appInfdG0eJ9J4NNL/pagK3Fh1sGclBvVkV/form) to become a contributor. We are looking forward to your participation!
+Custom objects stored as `self.xxx` on Role subclasses fail Pydantic serialization.
+Keep them as local variables in `__init__` and pass to methods as parameters.
 
-### Contact Information
+### JSONDecodeError when injecting evidence
 
-If you have any questions or feedback about this project, please feel free to contact us. We highly appreciate your suggestions!
+Evidence text must be injected into `design_doc.content`, not `task_doc.content`.
+The task document is parsed by `WriteCode.get_codes()` via `json.loads()` — appending
+non-JSON text to it causes the error.
 
-- **Email:** alexanderwu@deepwisdom.ai
-- **GitHub Issues:** For more technical inquiries, you can also create a new issue in our [GitHub repository](https://github.com/geekan/metagpt/issues).
+### Module not found: industry.roles
 
-We will respond to all questions within 2-3 business days.
+Run from the project root. The run script adds the project root to `sys.path`
+automatically. If importing manually, ensure you are in `MetaGPT-Volopa/`.
 
-## Citation
+### No API key configured
 
-To stay updated with the latest research and development, follow [@MetaGPT_](https://twitter.com/MetaGPT_) on Twitter. 
+Check `config/config2.yaml` exists and has a valid `api_key` under `llm:`.
 
-To cite [MetaGPT](https://openreview.net/forum?id=VtmBAGCN7o) in publications, please use the following BibTeX entries.   
+---
 
-```bibtex
-@inproceedings{hong2024metagpt,
-      title={Meta{GPT}: Meta Programming for A Multi-Agent Collaborative Framework},
-      author={Sirui Hong and Mingchen Zhuge and Jonathan Chen and Xiawu Zheng and Yuheng Cheng and Jinlin Wang and Ceyao Zhang and Zili Wang and Steven Ka Shing Yau and Zijuan Lin and Liyang Zhou and Chenyu Ran and Lingfeng Xiao and Chenglin Wu and J{\"u}rgen Schmidhuber},
-      booktitle={The Twelfth International Conference on Learning Representations},
-      year={2024},
-      url={https://openreview.net/forum?id=VtmBAGCN7o}
-}
-```
+## Reference Files
 
-For more work, please refer to [Academic Work](docs/ACADEMIC_WORK.md).
+| File                                                             | Description                                         |
+|------------------------------------------------------------------|-----------------------------------------------------|
+| `industry/dos_and_donts.pdf`                                     | Platform coding standards (source for YAML context) |
+| `industry/Volopa - Proposed Architecture.pdf`                    | Architecture reference                              |
+| `industry/requirements/SD-OOP_User_Management_System.pdf`        | User management spec (source PDF)                   |
+| `industry/requirements/SD-OOP_Pocket_expense.pdf`                | Pocket expense spec (source PDF)                    |
+| `industry/requirements/SD-OOP_Expense_single_data_capturing.pdf` | Single expense spec (source PDF)                    |
+| `industry/requirements/environment_context.yaml`                 | Platform-specific standards (source YAML)           |
+| `industry/requirements/project_context.yaml`                     | Feature specific requirements (source YAML)         |
