@@ -62,11 +62,11 @@ industry/
     laravel_qa_engineer.py       # Darius  - PHPUnit test generation
     __init__.py                  # Exports all 5 roles
   actions/
-    laravel_write_prd.py         # LaravelWritePRD action
-    laravel_write_prd_an.py      # ActionNode schema for PRD
-    laravel_design_api.py        # LaravelWriteDesign action
-    laravel_design_api_an.py     # ActionNode schema for design
-    laravel_write_code.py        # LaravelWriteCode action
+    laravel_write_prd.py         # LaravelWritePRD action wired to agent LaravelProductManager
+    laravel_write_prd_an.py      # ActionNode schema for LaravelWritePRD
+    laravel_design_api.py        # LaravelWriteDesign action wired to agent LaravelArchitect and watched by LaravelProductManager
+    laravel_design_api_an.py     # ActionNode schema for action LaravelWriteDesign
+    laravel_write_code.py        # LaravelWriteCode action for agent LaravelEngineer
   utils/
     context_reader.py            # ContextReader - shared YAML accessor
     evidence_injector.py         # Injects evidence into prompts
@@ -74,7 +74,7 @@ industry/
     repo_verifier.py             # Repository correctness checks
   requirements/
     project_context.yaml         # Feature-specific: requirements, flows, interfaces, constraints
-    environment_context.yaml     # Platform-wide: standards, dos/donts, existing tables/models, codebase interfaces, models
+    environment_context.yaml     # Platform-wide: standards, dos/donts, existing tables/models/interfaces
     SD-OOP_User_Management_System.pdf
     SD-OOP_Pocket_expense.pdf
     SD-OOP_Expense_single_data_capturing.pdf
